@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vikas Nagar Warriors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9eef2;--panel:#fff;--ink:#1c2740;--mute:#5d6b82;--line:#cfd8e3;--cell:#f8fafc;--hp:#e5484d;--ok:#1f9d6b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151b26;--panel:#1e2634;--ink:#e6ebf3;--mute:#98a5ba;--line:#33405a;--cell:#1a2230;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151b26;--panel:#1e2634;--ink:#e6ebf3;--mute:#98a5ba;--line:#33405a;--cell:#1a2230;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:grid;grid-template-columns:minmax(0,640px) minmax(280px,1fr);gap:24px;max-width:1100px;margin:0 auto;padding:16px}
+@media (max-width:860px){.app{grid-template-columns:1fr}}
+header{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;justify-content:space-between}
+h1{margin:0;font-size:26px;letter-spacing:-.01em}
+h2{margin:0 0 8px;font-size:15px}
+.clock{color:var(--mute)}.clock b{color:var(--ink);font-variant-numeric:tabular-nums}
+#grid{container-type:inline-size;display:grid;grid-template-columns:1.6fr repeat(16,3fr);background:var(--panel);padding:2cqw;border-radius:14px;border:1px solid var(--line);align-self:start}
+.lb{display:grid;place-items:center;font-size:1.9cqw;color:var(--mute);font-weight:500}
+.c{position:relative;display:grid;place-items:center;aspect-ratio:1;border:1px solid var(--line);background:var(--cell)}
+.c.rg{background:color-mix(in srgb,var(--pc) 20%,var(--cell))}
+.c.me{box-shadow:inset 0 0 0 .4cqw var(--pc)}
+.c.go{cursor:pointer}.c.go::after{content:"";width:28%;aspect-ratio:1;border-radius:50%;background:var(--pc);opacity:.75}
+.c.atk,.c.don{cursor:pointer}
+.c.atk{outline:.45cqw solid var(--hp);outline-offset:-.45cqw}
+.c.don{outline:.45cqw solid var(--ok);outline-offset:-.45cqw}
+.tk{display:grid;place-items:center;width:72%;aspect-ratio:1;margin-top:-8%;border-radius:50%;background:color-mix(in srgb,var(--c) 30%,var(--cell));box-shadow:0 0 0 .4cqw var(--c);font-size:3.3cqw;line-height:1}
+.hp{position:absolute;bottom:5%;left:0;right:0;display:flex;gap:.9cqw;justify-content:center}
+.hp i{width:1.1cqw;height:1.1cqw;border-radius:50%;background:var(--hp)}
+.side{display:grid;gap:14px;align-content:start}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.pcs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pc{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;align-items:center;text-align:left;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--cell);color:inherit;font:inherit;cursor:pointer}
+.pc.on{border-color:var(--c);box-shadow:0 0 0 2px var(--c)}
+.pc:disabled{opacity:.4;cursor:default}
+.pc .ic{grid-row:span 2;font-size:26px}.pc small{display:block;color:var(--mute);font-size:12px}
+.pc .st{color:var(--hp);letter-spacing:1px;font-size:13px}.pc .ap{font-size:13px;color:var(--mute)}.pc .ap b{color:var(--ink);font-size:15px}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button{font:inherit;color:inherit}
+.ab,.tb{padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--cell);cursor:pointer;text-align:left}
+.ab small{display:block;color:var(--mute);font-size:12px}
+.ab.on{background:var(--pc);border-color:var(--pc);color:#fff}.ab.on small{color:#ffffffcc}
+.ab:disabled,.tb:disabled{opacity:.45;cursor:default}
+button:focus-visible,input:focus-visible{outline:2px solid var(--pc,#2f7de1);outline-offset:2px}
+.hint{margin:10px 0 0;color:var(--mute)}
+.don-row{display:flex;gap:8px;align-items:center;margin-top:10px}
+.don-row input{width:70px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--cell);color:inherit;font:inherit}
+.tools{display:flex;flex-wrap:wrap;gap:8px}.tb{text-align:center}
+.log{margin:0;padding:0;list-style:none;max-height:210px;overflow:auto;font-size:13px;color:var(--mute)}
+.log li{padding:3px 0;border-bottom:1px solid var(--line)}.log li:first-child{color:var(--ink)}
+.win{font-weight:700;color:var(--ok)}
+@media (prefers-reduced-motion:no-preference){.tk{transition:transform .15s}.c.me .tk{transform:scale(1.08)}}
+[hidden]{display:none!important}
+#bar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+.wrap{max-width:900px;margin:0 auto;padding:16px;display:grid;gap:12px}
+.wrap input:not([type=file]){padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--cell);color:inherit;font:inherit}
+.dg{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.dg ol,.dg ul{margin:0;padding-left:20px}.dg li{padding:3px 0}
+.pg{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid var(--line);font-size:13px}
+.ph{width:1.2em;height:1.2em;border-radius:50%;object-fit:cover;vertical-align:middle}
+.tk .ph{width:100%;height:100%}.pc .ic .ph{width:32px;height:32px}#pv .ph{width:72px;height:72px}
+#toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:10px;z-index:5}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<nav id='bar' hidden><b id='who'></b><span><button class='tb' id='bd'>Dashboard</button> <button class='tb' id='bp'>Profile</button> <button class='tb' id='ba' hidden>Admin mode: off</button> <button class='tb' id='bo'>Log out</button></span></nav>
+<main id='auth' class='wrap'><h1>Vikas Nagar Warriors</h1><p class='hint'>Log in with your username and password. A new username creates your account.</p><input id='un' placeholder='Username' autocomplete='username'><input id='pw' type='password' placeholder='Password' autocomplete='current-password'><button class='tb' id='lg'>Log in or create account</button><p class='hint' id='authmsg'></p></main>
+<main id='prof' class='wrap' hidden><h2>Your player profile</h2><div><span id='pv'></span> <input id='pf' type='file' accept='image/*'></div><input id='dn' placeholder='Display name' maxlength='16'><button class='tb' id='ps'>Save profile</button></main>
+<main id='dash' class='wrap' hidden></main>
+<div id='toast' hidden></div>
+<div class='app' id='game' hidden>
+<header><h1>Vikas Nagar Warriors</h1><div class="clock">Next AP drop (7 am, 3 pm or 11 pm IST) in <b id="cd">--:--:--</b></div></header>
+<div id="grid" aria-label="16 by 16 game grid"></div>
+<div class="side" id="side"></div>
+</div>
+<script>
+const N=16,D=288e5,OFF=54e5,K="gridduel-v2";
+const PL=[{n:"Fox",e:"🦊",c:"#e58a1f"},{n:"Octopus",e:"🐙",c:"#7a5af8"},{n:"Owl",e:"🦉",c:"#12a594"},{n:"Dragon",e:"🐲",c:"#2f7de1"}];
+function spawn(){const s=new Set(),r=[];while(r.length<4){const x=Math.random()*N|0,y=Math.random()*N|0,k=x+","+y;if(!s.has(k)){s.add(k);r.push([x,y])}}return r}
+const $=s=>document.querySelector(s);
+let S,hist=[],mode=null,amt=1,god=false,dl=null,EV=null,rf=0,rv=false,rt=null;
+function fresh(){const sp=spawn(),pl=PL.map((_,i)=>({x:sp[i][0],y:sp[i][1],hp:3,ap:1,ext:0,alive:true}));return{players:pl,frames:[{l:"Game starts on random squares",p:pl.map(snapP),ev:null}],active:0,start:Date.now(),ticks:0,pub:["Game started. Positions were assigned randomly."],priv:[[],[],[],[]],gm:[ts()+" Game started. Everyone has 1 AP. Start squares: "+sp.map((q,i)=>PL[i].n+" "+String.fromCharCode(65+q[0])+(q[1]+1)).join(", ")]}}
+function load(){try{const o=JSON.parse(localStorage.getItem(K)||"null");if(o&&o.players&&o.players.length===4)return o}catch(e){}return fresh()}
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+const cs=p=>String.fromCharCode(65+p.x)+(p.y+1);
+const nm=i=>PL[i].n;
+const me=()=>S.players[S.active];
+const over=()=>S.players.filter(p=>p.alive).length<2;
+const at=(x,y)=>S.players.findIndex(p=>p.alive&&p.x===x&&p.y===y);
+const cheb=(p,x,y)=>Math.max(Math.abs(x-p.x),Math.abs(y-p.y));
+// Range: square of radius 2+ext, plus the four straight lines out to 3+ext
+function inR(p,x,y){const dx=Math.abs(x-p.x),dy=Math.abs(y-p.y),m=Math.max(dx,dy);if(!m)return false;return m<=2+p.ext||((!dx||!dy)&&m<=3+p.ext)}
+function push(a,t,c=60){a.unshift(t);a.length=Math.min(a.length,c)}
+function snapP(q){return[q.x,q.y,q.hp,q.ap,q.ext,q.alive?1:0]}
+function frame(c){S.frames.push({l:S.gm.slice(0,c).reverse().map(x=>x.slice(12)).join(" / "),p:S.players.map(snapP),ev:EV,g:S.gm.length});EV=null}
+function stopRp(){clearInterval(rt);rt=null;const b=$("#rplay");if(b)b.textContent="Play"}
+function syncRp(){drawRp();const s=$("#rs");if(s)s.value=rf}
+function drawRp(){const F=S.frames;rf=Math.max(0,Math.min(rf,F.length-1));const f=F[rf],pf=F[rf-1],ev=f.ev;let h="<i></i>"+[...Array(N)].map((_,i)=>`<b class="lb">${String.fromCharCode(65+i)}</b>`).join("");const gb=ev&&ev.k==="out"&&pf?pf.p[ev.b]:null,fm=ev&&ev.k==="move"&&pf?pf.p[ev.a]:null;for(let y=0;y<N;y++){h+=`<b class="lb">${y+1}</b>`;for(let x=0;x<N;x++){const t=f.p.findIndex(q=>q[5]&&q[0]===x&&q[1]===y);let c="c",s="";if(ev&&t>=0&&t===ev.a)c+=" me";if(ev&&t>=0&&t===ev.b)c+=ev.k==="give"?" don":" atk";if(fm&&fm[0]===x&&fm[1]===y)c+=" go";if(gb&&gb[0]===x&&gb[1]===y){c+=" atk";s=`<span class="tk" style="--c:${PL[ev.b].c}">💀</span>`}if(t>=0)s=`<span class="tk" style="--c:${PL[t].c}" title="${nm(t)}">${PL[t].e}</span><span class="hp">${"<i></i>".repeat(f.p[t][2])}</span>`;h+=`<div class="${c}">${s}</div>`}}const g=$("#grid");g.innerHTML=h;g.style.setProperty("--pc",PL[ev&&ev.a!==undefined?ev.a:0].c);const rc=$("#rpc"),rt2=$("#rpt");if(rc)rc.textContent=`Step ${rf+1} of ${F.length}: ${f.l}`;if(rt2)rt2.innerHTML=PL.map((pl,i)=>{const q=f.p[i];return`<div>${pl.e} ${pl.n}: ${q[5]?"♥".repeat(q[2])+"♡".repeat(3-q[2])+", "+q[3]+" AP, range "+(2+q[4]):"eliminated"}</div>`}).join("")}
+// log(all-events text, {pub: public text, priv: {playerIndex: private text}})
+function ts(){return new Date(Date.now()+198e5).toISOString().slice(5,16).replace("T"," ")}
+function report(){const w=S.players.findIndex(q=>q.alive);return["Vikas Nagar Warriors game record (times in IST, month-day hour:minute)","Result: "+(w>=0?nm(w)+" wins":"no winner"),"","Final state",...S.players.map((q,i)=>`${nm(i)}: ${q.alive?q.hp+" hearts, "+q.ap+" AP, at "+cs(q):"eliminated, "+q.ap+" AP left"}, range ${2+q.ext} (${3+q.ext} straight)`),"","Events, oldest first",...[...S.gm].reverse().map((l,i)=>`${i+1}. ${l}`)].join("\n")}
+function log(t,o={}){if(o.ev)EV=o.ev;push(S.gm,ts()+" "+t,1e9);if(o.pub)push(S.pub,o.pub);Object.entries(o.priv||{}).forEach(([i,x])=>push(S.priv[i],x))}
+const li=a=>a.map(l=>`<li>${l}</li>`).join("");
+function run(fn){hist.push(JSON.stringify(S));if(hist.length>60)hist.shift();const n0=S.gm.length;fn();frame(S.gm.length-n0);save();render()}
+function tick(n){const pv={};S.players.forEach((p,i)=>{if(p.alive){p.ap+=n;pv[i]=`Daily drop: +${n} AP`}});log("+"+n+" AP to every living player",{ev:{k:"drop"},priv:pv})}
+
+function render(){render0();if(!over()){rv=false;stopRp()}else if(rv&&S.frames.length)drawRp()}
+function render0(){
+  const p=me(),E=over(),G=god||E;
+  if(mode&&(p.ap<1||E))mode=null;
+  amt=Math.max(1,Math.min(amt,p.ap||1));
+  let h='<i></i>'+[...Array(N)].map((_,i)=>`<b class="lb">${String.fromCharCode(65+i)}</b>`).join("");
+  for(let y=0;y<N;y++){
+    h+=`<b class="lb">${y+1}</b>`;
+    for(let x=0;x<N;x++){
+      const t=at(x,y);let c="c";
+      if(!E&&inR(p,x,y))c+=" rg";
+      if(t===S.active)c+=" me";
+      if(mode==="move"&&t<0&&cheb(p,x,y)===1)c+=" go";
+      if((mode==="attack"||mode==="donate")&&t>=0&&t!==S.active&&inR(p,x,y))c+=mode==="attack"?" atk":" don";
+      h+=`<div class="${c}" data-x="${x}" data-y="${y}">`+(t>=0?`<span class="tk" style="--c:${PL[t].c}" title="${nm(t)}">${PL[t].e}</span>${t===S.active||G?`<span class="hp">${"<i></i>".repeat(S.players[t].hp)}</span>`:""}`:"")+"</div>";
+    }
+  }
+  const g=$("#grid");g.innerHTML=h;g.style.setProperty("--pc",PL[S.active].c);
+  const ab=(k,v,l,sub,min)=>`<button class="ab${mode===v?" on":""}" data-${k}="${v}" ${E||p.ap<min?"disabled":""}>${l}<small>${sub}</small></button>`;
+  const hints={move:"Click a highlighted neighbouring square. Each step costs 1 AP.",attack:"Click an enemy inside your range (1 AP, they lose 1 heart).",donate:"Pick an amount, then click a player inside your range."};
+  const w=S.players.findIndex(q=>q.alive);
+  $("#side").innerHTML=`
+  ${E&&S.frames.length?`<section class="box"><h2>Game replay</h2><div class="tools"><button class="tb" data-r="view">${rv?"Back to final board":"Watch replay"}</button></div>${rv?`<div class="tools" style="margin-top:10px"><button class="tb" data-r="first">Start</button><button class="tb" data-r="prev">Back</button><button class="tb" id="rplay" data-r="play">${rt?"Pause":"Play"}</button><button class="tb" data-r="next">Next</button><button class="tb" data-r="last">End</button></div><input id="rs" type="range" min="0" max="${S.frames.length-1}" value="${rf}" style="width:100%;margin-top:10px"><p class="hint" id="rpc"></p><div id="rpt" style="display:grid;gap:2px;font-size:13px;color:var(--mute)"></div>`:""}</section>`:""}
+  <section class="box"><h2>Players</h2><div class="pcs">${S.players.map((q,i)=>`<button class="pc${i===S.active?" on":""}" data-i="${i}" ${q.alive?"":"disabled"} style="--c:${PL[i].c}"><span class="ic">${PL[i].e}</span><span>${PL[i].n}<small>${q.alive?cs(q):"eliminated"}</small></span>${i===S.active||G?`<span class="st">${"♥".repeat(q.hp)}${"♡".repeat(3-q.hp)}</span><span class="ap"><b>${q.ap}</b> AP</span>`:`<span class="st">♥ ?</span><span class="ap">? AP</span>`}</button>`).join("")}</div></section>
+  <section class="box" style="--pc:${PL[S.active].c}"><h2>${E?`<span class="win">${w>=0?PL[w].e+" "+nm(w)+" wins":"No winner"}</span>`:`${PL[S.active].e} ${nm(S.active)}’s actions`}</h2>
+  <div class="acts">${ab("m","move","Move","1 AP per step",1)}${ab("m","attack","Attack","1 AP, −1 heart",1)}${ab("m","donate","Donate AP","any amount",1)}${ab("a","ext","Extend range","2 AP, +1 block",2)}</div>
+  ${mode==="donate"?`<div class="don-row"><label for="amt">Give</label><input id="amt" type="number" min="1" max="${p.ap}" value="${amt}"> <span>of ${p.ap} AP</span></div>`:""}
+  <p class="hint">${E?"Game over. Start a new game below.":mode?hints[mode]:`Reach: ${2+p.ext}-block square, ${3+p.ext} blocks in straight lines. Pick an action, or click a player to switch.`}</p></section>
+  ${adm?`<section class="box"><h2>Admin tools</h2><div class="tools"><button class="tb" data-t="tick">Simulate drop</button><button class="tb" data-t="plus">+5 AP to ${nm(S.active)}</button><button class="tb" data-t="undo">Roll back 1 step</button><button class="tb" data-t="god">${god?"Hide":"Show"} hidden info</button><button class="tb" data-t="reset">Abort game</button></div></section>`:""}
+  <section class="box"><h2>Public log</h2><ul class="log">${li(S.pub)}</ul></section>
+  <section class="box"><h2>${PL[S.active].n}’s private log</h2><ul class="log">${li(S.priv[S.active])}</ul></section>
+  ${god&&!E?`<section class="box"><h2>All events (test view)</h2><ul class="log">${li(S.gm)}</ul></section>`:""}
+  ${E?`<section class="box"><h2>Full game record</h2>${dl?`<button class="tb" data-t="dl">Download log (.txt)</button>`:""}<pre style="white-space:pre-wrap;font-family:inherit;font-size:13px;line-height:1.5;margin:10px 0 0;max-height:340px;overflow:auto">${report()}</pre></section>`:""}`;
+}
+
+$("#grid").onclick=e=>{
+  const c=e.target.closest("[data-x]");if(!c||over())return;
+  const x=+c.dataset.x,y=+c.dataset.y,t=at(x,y),p=me(),ok=t>=0&&t!==S.active&&p.ap>=1&&inR(p,x,y);
+  if(mode==="move"&&t<0&&p.ap>=1&&cheb(p,x,y)===1)return run(()=>{const f=cs(p);p.x=x;p.y=y;p.ap--;{const m=`${nm(S.active)} moved ${f} to ${cs(p)}`;log(m,{ev:{k:"move",a:S.active},pub:m,priv:{[S.active]:`You moved ${f} to ${cs(p)}, ${p.ap} AP left`}})}});
+  if(mode==="attack"&&ok)return run(()=>{const q=S.players[t];p.ap--;q.hp--;log(`${nm(S.active)} hit ${nm(t)}, ${q.hp} heart${q.hp===1?"":"s"} left`,{ev:{k:"hit",a:S.active,b:t},priv:{[S.active]:`You hit ${nm(t)}`,[t]:`You were hit, ${q.hp} heart${q.hp===1?"":"s"} left`}});if(q.hp<1){q.alive=false;log(`${nm(t)} was eliminated by ${nm(S.active)}`,{ev:{k:"out",a:S.active,b:t},pub:`${nm(t)} was eliminated`,priv:{[S.active]:`${nm(t)} is out`,[t]:"You were eliminated"}})}});
+  if(mode==="donate"&&ok){const n=Math.max(1,Math.min(amt,p.ap));return run(()=>{p.ap-=n;S.players[t].ap+=n;log(`${nm(S.active)} gave ${n} AP to ${nm(t)}`,{ev:{k:"give",a:S.active,b:t},priv:{[S.active]:`You gave ${n} AP to ${nm(t)}`,[t]:`${nm(S.active)} gave you ${n} AP`}})})}
+  if(t>=0&&adm){act=t;S.active=t;render()}
+};
+$("#side").onclick=e=>{
+  const b=e.target.closest("button");if(!b||b.disabled)return;const d=b.dataset;
+  if(d.i!==undefined){if(adm){act=+d.i;S.active=act;render()}return}
+  if(d.m){mode=mode===d.m?null:d.m;return render()}
+  if(d.a==="ext")return run(()=>{const p=me();p.ap-=2;p.ext++;log(`${nm(S.active)} extended range to ${2+p.ext} (${3+p.ext} straight)`,{ev:{k:"ext",a:S.active},priv:{[S.active]:`Range extended to ${2+p.ext} (${3+p.ext} straight)`}})});
+  if(d.t==="tick")return run(()=>tick(1));
+  if(d.t==="plus")return run(()=>{me().ap+=5;log(`Test: +5 AP to ${nm(S.active)}`,{ev:{k:"ap",a:S.active},priv:{[S.active]:"Test: +5 AP"}})});
+  if(d.t==="undo")return rollback();
+  if(d.r){const L=S.frames.length;
+    if(d.r==="view"){rv=!rv;rf=0;stopRp();return render()}
+    if(d.r==="play"){if(rt){stopRp();return}if(rf>=L-1)rf=0;b.textContent="Pause";syncRp();rt=setInterval(()=>{if(rf>=L-1)return stopRp();rf++;syncRp()},800);return}
+    rf=d.r==="first"?0:d.r==="last"?L-1:d.r==="prev"?Math.max(0,rf-1):Math.min(L-1,rf+1);stopRp();syncRp();return}
+  if(d.t==="dl"){if(dl)dl.save({filename:"vikas-nagar-warriors-log.txt",data:report()}).catch(()=>{});return}
+  if(d.t==="god"){god=!god;return render()}
+  if(d.t==="reset")return abortGame();
+};
+$("#side").oninput=e=>{if(e.target.id==="rs"){stopRp();rf=+e.target.value;drawRp();return}if(e.target.id==="amt")amt=Math.max(1,Math.floor(+e.target.value)||1)};
+
+function clock(){
+  const n=Date.now(),k=Math.floor((n-OFF)/D),next=(k+1)*D+OFF,due=k-Math.floor((S.start-OFF)/D);
+  if(due>S.ticks){const d=due-S.ticks;S.ticks=due;if(!over()){tick(d);log("That was the real 8:00 pm IST drop");frame(2)}save();render()}
+  const s=Math.round((next-n)/1000);
+  $("#cd").textContent=[s/3600|0,(s/60|0)%60,s%60].map(v=>String(v).padStart(2,"0")).join(":");
+}
+
+dl={save:({filename,data})=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"text/plain"}));a.download=filename;a.click();return Promise.resolve()}};
+</script>
+<script>
+// Paste your Firebase web app settings between the braces (see the setup steps).
+const FIREBASE_CONFIG={apiKey:'AIzaSyAEKbR8JK9V6aRlJhrYW0v-HQfNzLhnijE',authDomain:'vkwarriors-db3de.firebaseapp.com',projectId:'vkwarriors-db3de',storageBucket:'vkwarriors-db3de.firebasestorage.app',messagingSenderId:'278272231983',appId:'1:278272231983:web:304100ad4aa51f1f7ed4da'};
+let db,GD,ME,ISA=false,adm=false,act=0,myIdx=-1,RO=false,inGame=false,busy=false,CUR=null,USERS={},LOBBY=[],META=[],PIMG='';
+const COL=['#e58a1f','#7a5af8','#12a594','#2f7de1','#e0457b','#8aa31f','#c24d2c','#5a6b82'];
+const esc=s=>String(s==null?'':s).replace(/[<>&"'`]/g,'');
+const okImg=s=>typeof s==='string'&&/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(s);
+const icon=i=>{const u=USERS[i]||{};return okImg(u.img)?`<img class='ph' src='${u.img}'>`:'🙂'};
+const uname=i=>esc((USERS[i]||{}).n||i);
+function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;setTimeout(()=>e.hidden=true,4000)}
+function msg(t){$('#authmsg').textContent=t}
+function show(s){['auth','prof','dash','game'].forEach(k=>$('#'+k).hidden=k!==s);$('#bar').hidden=s==='auth'}
+function spawn(n){const s=new Set(),r=[];while(r.length<n){const x=Math.random()*N|0,y=Math.random()*N|0,k=x+','+y;if(!s.has(k)){s.add(k);r.push([x,y])}}return r}
+function fresh(names,prof){const sp=spawn(names.length),pl=names.map((_,i)=>({x:sp[i][0],y:sp[i][1],hp:3,ap:1,ext:0,alive:true}));return{names,prof,players:pl,frames:[{l:'Game starts on random squares',p:pl.map(snapP),ev:null,g:1}],active:0,start:Date.now(),ticks:0,pub:['Game started. Positions were assigned randomly.'],priv:names.map(()=>[]),gm:[ts()+' Game started. Everyone has 1 AP. Start squares: '+sp.map((q,i)=>prof[i].n+' '+String.fromCharCode(65+q[0])+(q[1]+1)).join(', ')]}}
+function save(){}
+function setup(){PL.length=0;S.prof.forEach(p=>PL.push(p));myIdx=S.names.indexOf(ME);if(RO)act=0;else if(!adm||act<0||act>=S.players.length)act=Math.max(0,myIdx);S.active=act}
+async function run(fn,nf){if(RO||busy||!S)return;if(!adm&&!S.names.includes(ME))return;busy=true;try{const g=await GD.get();if(!g.exists)return;const f=JSON.parse(g.data().s);S.players.forEach((q,i)=>Object.assign(q,f.players[i]));delete f.players;Object.assign(S,f);setup();const n0=S.gm.length;fn();if(!nf)frame(S.gm.length-n0);await GD.set({s:JSON.stringify(S)});if(over())await archive(S)}catch(e){toast('Could not save that action: '+((e&&(e.message||e.code))||e))}finally{busy=false;render()}}
+function rollback(){return run(()=>{const F=S.frames;if(F.length<2)return;F.pop();const f=F[F.length-1];S.players.forEach((q,i)=>{const a=f.p[i];q.x=a[0];q.y=a[1];q.hp=a[2];q.ap=a[3];q.ext=a[4];q.alive=!!a[5]});S.gm=S.gm.slice(S.gm.length-f.g);push(S.pub,'Admin rolled the game back one step');push(S.gm,ts()+' Admin rolled back to step '+F.length,1e9);EV=null},true)}
+async function abortGame(){await GD.delete();RO=false;inGame=false;show('dash');dash()}
+async function archive(s){const id=String(s.start),w=s.players.findIndex(q=>q.alive);await db.doc('past/'+id).set({s:JSON.stringify({...s,pub:[],priv:[]})});await db.doc('pastmeta/'+id).set({t:Date.now(),w:w>=0?s.names[w]:'',wn:w>=0?s.prof[w].n:'',ids:s.names,ns:s.prof.map(p=>p.n)});await GD.delete()}
+async function startGame(){const ids=LOBBY.map(x=>x.id);if(ids.length<2||CUR)return;const prof=ids.map((id,i)=>{const u=USERS[id]||{};return{n:esc(u.n||id),e:okImg(u.img)?`<img class='ph' src='${u.img}'>`:'🙂',c:COL[i%COL.length]}});await GD.set({s:JSON.stringify(fresh(ids,prof))});await Promise.all(ids.map(id=>db.doc('lobby/'+id).delete()))}
+async function viewPast(id){const d=await db.doc('past/'+id).get();if(!d.exists)return toast('That game is missing.');S=JSON.parse(d.data().s);RO=true;inGame=true;setup();show('game');render()}
+function dash(){if(!ME||$('#dash').hidden)return;const w={},pl={};META.forEach(m=>{w[m.w]=(w[m.w]||0)+1;m.ids.forEach(i=>pl[i]=(pl[i]||0)+1)});const lb=Object.keys(USERS).filter(i=>USERS[i].n).map(i=>[i,w[i]||0,pl[i]||0]).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));const inL=LOBBY.some(l=>l.id===ME),inCur=CUR&&CUR.names.includes(ME);$('#dash').innerHTML=`<h2>Hello, ${uname(ME)}</h2><div class='dg'><section class='box'><h2>Leaderboard</h2>${lb.length?'<ol>'+lb.map(r=>`<li>${icon(r[0])} ${uname(r[0])}: ${r[1]} win${r[1]===1?'':'s'} from ${r[2]} game${r[2]===1?'':'s'}</li>`).join('')+'</ol>':"<p class='hint'>No players yet.</p>"}</section><section class='box'><h2>Lobby for the next game</h2>${CUR?`<p class='hint'>A game is in progress.</p><button class='tb' data-g='open' ${inCur||ISA?'':'disabled'}>${inCur?'Open your game':'Watch as admin'}</button>`:''}<ul>${LOBBY.map(l=>`<li>${icon(l.id)} ${uname(l.id)}</li>`).join('')||"<li class='hint'>Nobody waiting yet.</li>"}</ul><div class='tools'><button class='tb' data-g='join'>${inL?'Leave lobby':'Join next game'}</button>${ISA?`<button class='tb' data-g='start' ${CUR||LOBBY.length<2?'disabled':''}>Start game with ${LOBBY.length}</button>`:''}</div></section><section class='box'><h2>Past games</h2>${META.map(m=>`<div class='pg'><span>${new Date(m.t+198e5).toISOString().slice(0,10)}: ${esc(m.wn||'no winner')} won (${m.ns.map(esc).join(', ')})</span><button class='tb' data-v='${esc(m.id)}'>Replay</button></div>`).join('')||"<p class='hint'>No finished games yet.</p>"}</section></div>`}
+$('#dash').onclick=async e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;try{if(d.v)return viewPast(d.v);if(d.g==='join'){const r=db.doc('lobby/'+ME);return LOBBY.some(l=>l.id===ME)?await r.delete():await r.set({t:Date.now()})}if(d.g==='start')return startGame();if(d.g==='open'&&CUR){S=CUR;RO=false;inGame=true;if(ISA&&!S.names.includes(ME)){adm=true;$('#ba').textContent='Admin mode: on'}setup();show('game');render()}}catch(x){toast('Something went wrong: '+((x&&(x.message||x.code))||x))}};
+function shrink(f){return new Promise(r=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');c.width=c.height=96;const m=Math.min(i.width,i.height);c.getContext('2d').drawImage(i,(i.width-m)/2,(i.height-m)/2,m,m,0,0,96,96);r(c.toDataURL('image/jpeg',.7))};i.src=URL.createObjectURL(f)})}
+function profShow(){show('prof');PIMG='';$('#dn').value=(USERS[ME]||{}).n||'';$('#pv').innerHTML=icon(ME)}
+$('#pf').onchange=async e=>{const f=e.target.files[0];if(f){PIMG=await shrink(f);$('#pv').innerHTML=`<img class='ph' src='${PIMG}'>`}};
+$('#ps').onclick=async()=>{const n=esc($('#dn').value.trim()).slice(0,16);if(!n)return toast('Enter a display name.');const o={n};if(PIMG)o.img=PIMG;await db.doc('users/'+ME).update(o);show('dash');dash()};
+async function login(u,p,auto){u=u.trim().toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,20);if(!u)return msg('Pick a username using letters, numbers, - or _.');const r=db.doc('users/'+u),d=await r.get();let o;if(d.exists){o=d.data();if(!auto&&o.pw!==p)return msg('Wrong password.')}else{if(auto)return;if(!p)return msg('Enter a password.');o={pw:p,n:'',img:''};await r.set(o)}ME=u;ISA=u==='zet';adm=false;try{localStorage.setItem(K+'u',u)}catch(e){}$('#who').textContent=u;$('#ba').hidden=!ISA;$('#ba').textContent='Admin mode: off';msg('');o.n?(show('dash'),dash()):profShow()}
+$('#lg').onclick=()=>login($('#un').value,$('#pw').value).catch(e=>msg('Login failed: '+((e&&(e.message||e.code))||e)));
+$('#bd').onclick=()=>{RO=false;inGame=false;stopRp();show('dash');dash()};
+$('#bp').onclick=profShow;
+$('#ba').onclick=()=>{adm=!adm;god=false;$('#ba').textContent='Admin mode: '+(adm?'on':'off');if(inGame&&!RO){setup();render()}};
+$('#bo').onclick=()=>{try{localStorage.removeItem(K+'u')}catch(e){}ME=null;adm=false;inGame=false;show('auth')};
+function clock(){const n=Date.now(),k=Math.floor((n-OFF)/D),s=Math.round(((k+1)*D+OFF-n)/1e3);$('#cd').textContent=[s/3600|0,(s/60|0)%60,s%60].map(v=>String(v).padStart(2,'0')).join(':');if(inGame&&!RO&&S&&!over()&&k-Math.floor((S.start-OFF)/D)>S.ticks&&!busy)run(()=>{const due=k-Math.floor((S.start-OFF)/D);if(due<=S.ticks)return;const d=due-S.ticks;S.ticks=due;tick(d);log('Scheduled AP drop, '+d+' time'+(d>1?'s':''))})}
+setInterval(clock,1000);
+(async()=>{try{if(FIREBASE_CONFIG.apiKey.startsWith('PASTE'))throw 0;firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore()}catch(e){return msg('Could not connect to the database. Open index.html and paste your Firebase settings into FIREBASE_CONFIG.')}
+GD=db.doc('cur/game');
+db.collection('users').onSnapshot(s=>{USERS={};s.docs.forEach(d=>USERS[d.id]=d.data());dash()});
+db.collection('lobby').onSnapshot(s=>{LOBBY=s.docs.map(d=>({id:d.id}));dash()});
+db.collection('pastmeta').onSnapshot(s=>{META=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.t-a.t);dash()});
+GD.onSnapshot(s=>{CUR=s.exists?JSON.parse(s.data().s):null;if(inGame&&!RO){if(CUR){S=CUR;setup();render()}else if(!over()){inGame=false;show('dash')}}dash();if(CUR&&ISA&&CUR.players.filter(q=>q.alive).length<2)archive(CUR).catch(()=>{})});
+try{const u=localStorage.getItem(K+'u');if(u)await login(u,null,true)}catch(e){}
+})();
+</script>
+</body>
+</html>
